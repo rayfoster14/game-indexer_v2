@@ -180,7 +180,11 @@ module.exports = {
                 ],
                 extraFields: {
                     path_ENG: "English Patch",
-                    crc32: "CRC32"
+                    crc32: "CRC32",
+                    prgCRC:"PRG",
+                    chrCRC:"CHR",
+                    pcb_map:"Mapper",
+                    type:"Region"
                 }
             },
             snes: {
