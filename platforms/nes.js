@@ -50,17 +50,20 @@ module.exports = {
     extractData: async function (file) {
         var thisFile = fs.readFileSync(file.path);
         var x = (crc.crc32(thisFile).toString(16)).toUpperCase();
+        x = _f.fillInZeros(x)
         file.header = x
         file.crc32 = x
         file.id = x;
         if (fs.existsSync(file.rootDir + '/PRG.bin')) {
             var thisPRG = fs.readFileSync(file.rootDir + '/PRG.bin');
             var prgcrc = (crc.crc32(thisPRG).toString(16)).toUpperCase();
+            prgcrc = _f.fillInZeros(prgcrc);
             file.prgCRC = prgcrc
         }
         if (fs.existsSync(file.rootDir + '/CHR.bin')) {
             var thisCHR = fs.readFileSync(file.rootDir + '/CHR.bin');
             var chrcrc = (crc.crc32(thisCHR).toString(16)).toUpperCase();
+            chrcrc = _f.fillInZeros(chrcrc)
             file.chrCRC = chrcrc
         }
         return file
@@ -71,9 +74,13 @@ module.exports = {
             var chr = file.chrCRC ? file.chrCRC : "na";
             if (_db.nes[i].id == file.header ||
                 _db.nes[i].prgrom == file.header ||
-                _db.nes[i].chrrom == file.header ||
-                _db.nes[i].prgrom == prg ||
-                _db.nes[i].chrrom == chr ){
+                //Removed as CHR rom would find wrong region of game
+                //_db.nes[i].chrrom == file.header ||
+                //_db.nes[i].chrrom == chr ||
+                _db.nes[i].prgrom == prg ){
+                
+                var betterTitle = _db.nes[i].title.split('(')[0]
+                _db.nes[i].title = betterTitle
                 return {
                     ..._db.nes[i],
                     ...file

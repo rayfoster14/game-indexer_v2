@@ -2,7 +2,8 @@ const fs = require('fs');
 const du = require('du');
 var shiftjis = require('shiftjis');
 const rl = require('readline-sync');
-const crypto = require('crypto')
+const crypto = require('crypto');
+const { off } = require('process');
 
 
 
@@ -94,6 +95,15 @@ module.exports = {
     },
     decodeJapaneseHeader(buffer) {
         return shiftjis.decode(buffer)
+    },
+    fillInZeros: function(str){
+        //If a hex string is smaller than 8, prepend zeros...
+        var length = str.length;
+        do{
+            if(length < 8)str = '0'+str;
+            length = str.length;
+        }while(length < 8)
+        return str;
     },
     createConfig() {
         var newConfig = {

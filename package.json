@@ -1,21 +1,36 @@
 {
-  "name": "game-indexer-2.0",
+  "name": "game-indexer-2.0-gbname",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "basic-ftp": "^4.6.6",
     "cli-progress": "^3.9.1",
     "crc": "^4.0.0",
     "du": "^1.0.0",
+    "enquirer": "^2.3.6",
     "excel4node": "^1.7.2",
+    "inquirer": "^8.2.2",
+    "node-gyp-build": "^4.4.0",
+    "puppeteer": "^13.5.2",
     "readline-sync": "^1.4.10",
-    "shiftjis": "^1.0.0"
+    "serialport": "^9.2.8",
+    "shiftjis": "^1.0.0",
+    "tabletojson": "^2.0.7",
+    "xml-js": "^1.6.11"
   },
+  "binsis": "main.js",
   "bin": "main.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pkg main.js --public --targets node14-win-x64 --out-path dist",
+    "postbuild": "cp -R node_modules/puppeteer/.local-chromium dist/.local-chromium"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "pkg":{
+    "assets":[
+      "node_modules/@serialport"
+    ]
+  }
 }
