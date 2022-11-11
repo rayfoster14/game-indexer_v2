@@ -27,27 +27,5 @@ module.exports = {
         }
         file.header = 'NOT FOUND'
         return file
-    },
-    extraProcessing: async function(list){
-        //Find Patched versions
-        var filtlist = [];
-        for(var e=0; e < list.length; e++){
-            if(list[e].file.indexOf('_ENG') == -1){
-                filtlist.push(list[e])
-            }
-        }
-        for(var e=0; e < list.length; e++){
-            if(list[e].file.indexOf('_ENG') !== -1){
-                for(var u = 0; u < filtlist.length; u++){
-                    if(list[e].id == filtlist[u].id){
-                        filtlist[u].file_ENG = list[e].file
-                        filtlist[u].path_ENG = list[e].path
-                        filtlist[u].translated = 'ENG'
-                        filtlist[u].language = 'JAP'
-                    }
-                }
-            }
-        }
-        return filtlist;
     }
 }

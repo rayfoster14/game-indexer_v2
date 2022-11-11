@@ -190,6 +190,7 @@ var makeReport = function (data) {
 }
 module.exports = {
     writeToExcel: async function(obj)  {
+        console.log('\nSpreadsheet Reporter'.green)
         console.log('Creating games reports...')
         var report = makeReport(obj)
         console.log('Converting game lists to arrays...')
