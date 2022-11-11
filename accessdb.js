@@ -2,7 +2,7 @@
 
 let go = async function(gameList){
     let database = _c.accessDb;
-    let tableName = _c.tableName;
+    let tableName = _c.accessTableName;
 
     //Thank you el3um4s if you see this, for the wonderful library!
     let table = require('@el3um4s/node-mdb').table;

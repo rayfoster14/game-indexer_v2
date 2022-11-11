@@ -303,6 +303,13 @@ module.exports = {
         
         newConfig.indexer.directories.rootRoms = ask('Path to root directory of roms?', 'Z:/Games/');
         newConfig.indexer.excel.file = ask('Name of excel file to export', 'report.xlsx');
+        newConfig.indexer.accessDb = ask('Is there a MS Access DB to update? (.mdb). Type "n" if no.', 'Z:/file.mdb');
+        if( newConfig.indexer.accessDb === 'n'){
+            newConfig.indexer.accessDb = undefined
+        }else{
+            newConfig.indexer.accessTableName = ask('Okay great! What is the name of the table to match JSON output?', 'Inventory');
+        }
+
 
         console.log('Configure platforms to index. Type [y] to set up.');
         var newPlatformList = Object.keys(defaultPlatform);

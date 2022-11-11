@@ -18,7 +18,7 @@ The script will follow this logical order:
 4. Lookup header data on database from each file
 5. Extra processing (like looking for multi disc files or translation patches)
 6. Organises records
-7. Exports JSON and XLSX file
+7. Exports JSON, XLSX file and to Access MDB
 
 ## Directory Structure
 
