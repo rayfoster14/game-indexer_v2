@@ -34,20 +34,40 @@ module.exports = {
         let bytes = file.path ? (await _f.readBigFileBytes(file.path, 0, 1000000)) : "";
         var header = ""
 
-        //Finds and stores Header information
-        if (bytes.indexOf('SCES') !== -1) {
-            var index = bytes.indexOf('SCES');
+        let demo;
+        //Demo disks
+        if (bytes.indexOf('SLED') !== -1) {
+            var index = bytes.indexOf('SLED');
             for (var e = 0; e < 12; e++) {
                 header += bytes[index + e]
             }
+            demo = true;
         }
-        if (bytes.indexOf('SLES') !== -1) {
-            var index = bytes.indexOf('SLES');
+        if (bytes.indexOf('SCED') !== -1) {
+            var index = bytes.indexOf('SCED');
             for (var e = 0; e < 12; e++) {
                 header += bytes[index + e]
             }
+            demo = true;
         }
 
+        //Finds and stores Header information
+        //make !demo more elegant at some point in the future...
+        if(!demo){
+            if (bytes.indexOf('SCES') !== -1) {
+                var index = bytes.indexOf('SCES');
+                for (var e = 0; e < 12; e++) {
+                    header += bytes[index + e]
+                }
+            }
+            if (bytes.indexOf('SLES') !== -1) {
+                var index = bytes.indexOf('SLES');
+                for (var e = 0; e < 12; e++) {
+                    header += bytes[index + e]
+                }
+            }
+        }
+    
         //Standardises header code
         header = header.replace('_', '-').replace('.', "").replace(';', "").trim();
         header = header.length == 9 ? _f.injectCharIntoString(header, 4, '-') : header

@@ -1,9 +1,12 @@
 module.exports={
     extractData: async function (file) {
     
-        let bytes = file.path ? (await _f.readBigFileBytes(file.path, 0, 5000000)): "";
 
-        var findHeader = function(occurance){
+
+        var findHeader = async function(occurance, start, finish){
+
+            let bytes = file.path ? (await _f.readBigFileBytes(file.path, start, finish)) : "";
+
             var header = ""
             //Finds and stores Header information
             if(bytes.indexOf('SCES', bytes.indexOf('SCES')+occurance) !== -1){
@@ -21,20 +24,50 @@ module.exports={
                     for(var e = 0; e < 12; e++){
                         header+=bytes[index+e]
                     }
-            }else{
-                header = "NOTFOUND"
             }
-
-            //Standardises header code
-            header = header.replace('_','-').replace('.',"").replace(';',"").trim();
-            header = header.length == 9 ? _f.injectCharIntoString(header,4,'-') : header;
-
-            return header
+            return header !== '' ? header : undefined;
         }
 
-        returnHeader = findHeader(0);
-        returnHeader[4] !== '-' ? returnHeader = findHeader(1): returnHeader;
-        file.header = returnHeader;
+
+
+        //Let's loop through each 5,000 bytes to search for the header string
+        //Most will start around here, taking 7-8 attempts
+        let start = 520000;
+        let finish = 525000;
+        let looped = 0;
+        let givenUp
+        let timeouts = 30;
+        let returnHeader;
+
+        let searchLoop = async function(){
+            do{
+                returnHeader = await findHeader(0, start, finish);
+                
+                start+=5000
+                finish+=5000
+
+                looped++
+                if(looped === timeouts) break;
+
+            }while(!returnHeader || givenUp)
+        }
+        await searchLoop()
+
+        if(!returnHeader){
+            //Tough one huh? Let's so a mega search...
+            start = 0;
+            finish = 5000;
+            timeouts = 6000;
+            await searchLoop();
+        }
+
+        //Standardises header code
+        if(returnHeader){
+            returnHeader = returnHeader.replace('_','-').replace('.',"").replace(';',"").trim();
+            returnHeader = returnHeader.length == 9 ? _f.injectCharIntoString(returnHeader,4,'-') : returnHeader;
+            returnHeader[4] !== '-' ? returnHeader = findHeader(1): returnHeader;
+            file.header = returnHeader;
+        }
         return file
     },
     getDBInfo: async function(file){
